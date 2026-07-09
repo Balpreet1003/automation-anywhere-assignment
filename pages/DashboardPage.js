@@ -4,47 +4,50 @@ export class DashboardPage extends BasePage {
     constructor(page) {
         super(page);
 
-        // Left navigation
-        this.automationMenu = page.getByRole("link", {
-            name: "Automation",
-        });
+        // Left Navigation
+        this.automationMenu = page.locator(
+            'a[name="automations"]'
+        );
 
         // Header
-        this.homeMenu = page.getByRole("link", {
-            name: "Home",
-        });
+        this.automationHeader = page.locator(
+            '[data-header-label="Automation"]'
+        );
 
         // Create Button
-        this.createButton = page.getByRole("button", {
-            name: "Create",
-        });
+        this.createButton = page
+            .locator('[data-header-label="Automation"]')
+            .locator('button[name="createOptions"]');
 
-        // Search Box
+        // Create -> Form
+        this.createFormButton = page.locator(
+            'button[name="create-attended-form"]'
+        );
+
+        // Search
         this.searchBox = page.getByPlaceholder("Search");
-
-        // Existing Form
-        this.uiAutomationAssignment = page.getByRole("link", {
-            name: "UI Automation Assignment",
-        });
     }
 
     async verifyDashboardLoaded() {
-        await this.assertVisible(this.homeMenu);
+        await this.assertVisible(this.automationHeader);
     }
 
     async clickAutomationMenu() {
         await this.click(this.automationMenu);
+
+        await this.assertVisible(this.automationHeader);
     }
 
-    async clickCreate() {
+    async openCreateMenu() {
         await this.click(this.createButton);
+    }
+
+    async createNewForm() {
+        await this.openCreateMenu();
+        await this.click(this.createFormButton);
     }
 
     async search(name) {
         await this.fill(this.searchBox, name);
-    }
-
-    async openExistingForm() {
-        await this.click(this.uiAutomationAssignment);
     }
 }

@@ -1,0 +1,51 @@
+{
+    "formName": "UI Automation Assignment",
+
+    "fields": [
+        {
+            "type": "textbox",
+            "label": "First Name",
+            "defaultValue": "Balpreet",
+            "hint": "Enter First Name",
+            "required": true
+        },
+        {
+            "type": "textbox",
+            "label": "Middle Name",
+            "defaultValue": "Singh",
+            "hint": "Enter Middle Name",
+            "required": false
+        },
+        {
+            "type": "textbox",
+            "label": "Last Name",
+            "defaultValue": "Gill",
+            "hint": "Enter Last Name",
+            "required": true
+        },
+        {
+            "type": "textbox",
+            "label": "Email Id",
+            "defaultValue": "example@gmail.com",
+            "hint": "Enter Email Id",
+            "required": true
+        },
+        {
+            "type": "password",
+            "label": "Password",
+            "hint": "Enter Password",
+            "required": true
+        }
+    ],
+
+    "rule": {
+        "if": {
+            "field": "First Name",
+            "condition": "Is not empty"
+        },
+        "then": {
+            "field": "Last Name",
+            "action": "Show"
+        }
+    }
+}
