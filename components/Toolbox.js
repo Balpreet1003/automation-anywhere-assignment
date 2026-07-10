@@ -1,27 +1,29 @@
 import { BasePage } from '../pages/BasePage.js';
 
 export class Toolbox extends BasePage {
-    constructor(page) {
-        super(page);
+    constructor(frame) {
+        super(frame);
+
+        this.frame = frame;
 
         // Toolbox Controls
-        this.textBox = page.locator('[data-item-name="TextBox"]');
-        this.label = page.locator('[data-item-name="Label"]');
-        this.password = page.locator('[data-item-name="Password"]');
-        this.button = page.locator('[data-item-name="Button"]');
-        this.dropdown = page.locator('[data-item-name="Dropdown"]');
-        this.checkbox = page.locator('[data-item-name="CheckBoxGroup"]');
-        this.date = page.locator('[data-item-name="Date"]');
-        this.number = page.locator('[data-item-name="Number"]');
-        this.textArea = page.locator('[data-item-name="TextArea"]');
-        this.radioButton = page.locator('[data-item-name="RadioButtonGroup"]');
-        this.image = page.locator('[data-item-name="Image"]');
-        this.hyperlink = page.locator('[data-item-name="Hyperlink"]');
-        this.table = page.locator('[data-item-name="Table"]');
-        this.fileUpload = page.locator('[data-item-name="File"]');
-        this.folderUpload = page.locator('[data-item-name="Folder"]');
-        this.snapshot = page.locator('[data-item-name="Snapshot"]');
-        this.time = page.locator('[data-item-name="Time"]');
+        this.textBox = this.frame.locator('[data-item-name="TextBox"]');
+        this.label = this.frame.locator('[data-item-name="Label"]');
+        this.password = this.frame.locator('[data-item-name="Password"]');
+        this.button = this.frame.locator('[data-item-name="Button"]');
+        this.dropdown = this.frame.locator('[data-item-name="Dropdown"]');
+        this.checkbox = this.frame.locator('[data-item-name="CheckBoxGroup"]');
+        this.date = this.frame.locator('[data-item-name="Date"]');
+        this.number = this.frame.locator('[data-item-name="Number"]');
+        this.textArea = this.frame.locator('[data-item-name="TextArea"]');
+        this.radioButton = this.frame.locator('[data-item-name="RadioButtonGroup"]');
+        this.image = this.frame.locator('[data-item-name="Image"]');
+        this.hyperlink = this.frame.locator('[data-item-name="Hyperlink"]');
+        this.table = this.frame.locator('[data-item-name="Table"]');
+        this.fileUpload = this.frame.locator('[data-item-name="File"]');
+        this.folderUpload = this.frame.locator('[data-item-name="Folder"]');
+        this.snapshot = this.frame.locator('[data-item-name="Snapshot"]');
+        this.time = this.frame.locator('[data-item-name="Time"]');
     }
 
     async dragTextBox(target) {

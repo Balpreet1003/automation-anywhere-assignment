@@ -2,8 +2,10 @@ import { BasePage } from "../pages/BasePage.js";
 
 export class RuleCard extends BasePage {
 
-    constructor(page) {
-        super(page);
+    constructor(frame) {
+        super(frame);
+
+        this.frame = frame;
     }
 
     /**
@@ -11,7 +13,7 @@ export class RuleCard extends BasePage {
      * @param {number} index
      */
     getRule(index) {
-        return this.page.locator(".rule-border").nth(index);
+        return this.frame.locator(".rule-border").nth(index);
     }
 
     /**
@@ -28,11 +30,13 @@ export class RuleCard extends BasePage {
      * @param {number} index
      */
     async expandRule(index) {
+
         const expandButton = this.getRule(index)
             .getByRole("button")
             .first();
 
         await this.click(expandButton);
+
     }
 
     /**
@@ -40,11 +44,13 @@ export class RuleCard extends BasePage {
      * @param {number} index
      */
     async collapseRule(index) {
+
         const collapseButton = this.getRule(index)
             .getByRole("button")
             .first();
 
         await this.click(collapseButton);
+
     }
 
     /**
@@ -57,6 +63,7 @@ export class RuleCard extends BasePage {
         const title = this.getRuleTitle(index);
 
         await this.clearAndFill(title, ruleName);
+
     }
 
     /**
@@ -64,7 +71,9 @@ export class RuleCard extends BasePage {
      * @param {number} index
      */
     async getRuleName(index) {
+
         return await this.getRuleTitle(index).inputValue();
+
     }
 
     /**
@@ -78,6 +87,7 @@ export class RuleCard extends BasePage {
             .last();
 
         await this.click(menu);
+
     }
 
     /**
@@ -90,6 +100,7 @@ export class RuleCard extends BasePage {
             .getByRole("checkbox");
 
         await this.check(toggle);
+
     }
 
     /**
@@ -102,6 +113,7 @@ export class RuleCard extends BasePage {
             .getByRole("checkbox");
 
         await this.uncheck(toggle);
+
     }
 
     /**
@@ -109,6 +121,9 @@ export class RuleCard extends BasePage {
      * @param {number} index
      */
     async verifyRuleVisible(index) {
+
         await this.assertVisible(this.getRule(index));
+
     }
+
 }

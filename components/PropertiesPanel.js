@@ -2,13 +2,22 @@ import { BasePage } from '../pages/BasePage.js';
 
 export class PropertiesPanel extends BasePage {
 
-    constructor(page) {
-        super(page);
+    constructor(frame) {
+        super(frame);
 
-        this.panel = page.locator('.property-pane');
+        this.frame = frame;
 
-        this.resetButton = page.getByRole('button', { name: 'Reset' });
-        this.deleteButton = page.getByRole('button', { name: 'Delete' });
+        // Property Panel
+        this.panel = this.frame.locator('.property-pane');
+
+        // Toolbar Buttons
+        this.resetButton = this.frame.getByRole('button', {
+            name: 'Reset'
+        });
+
+        this.deleteButton = this.frame.getByRole('button', {
+            name: 'Delete'
+        });
     }
 
     /**
@@ -24,8 +33,13 @@ export class PropertiesPanel extends BasePage {
      * @param {string} label
      */
     async setElementLabel(index, label) {
-        const input = this.page.locator(`#TextBox${index}-label input`);
+
+        const input = this.frame.locator(
+            `#TextBox${index}-label input`
+        );
+
         await this.clearAndFill(input, label);
+
     }
 
     /**
@@ -34,8 +48,13 @@ export class PropertiesPanel extends BasePage {
      * @param {string} value
      */
     async setDefaultValue(index, value) {
-        const input = this.page.locator(`#TextBox${index}-defaultValue input`);
+
+        const input = this.frame.locator(
+            `#TextBox${index}-defaultValue input`
+        );
+
         await this.clearAndFill(input, value);
+
     }
 
     /**
@@ -44,8 +63,13 @@ export class PropertiesPanel extends BasePage {
      * @param {string} hint
      */
     async setHint(index, hint) {
-        const input = this.page.locator(`#TextBox${index}-hintText input`);
+
+        const input = this.frame.locator(
+            `#TextBox${index}-hintText input`
+        );
+
         await this.clearAndFill(input, hint);
+
     }
 
     /**
@@ -54,8 +78,13 @@ export class PropertiesPanel extends BasePage {
      * @param {string} tooltip
      */
     async setTooltip(index, tooltip) {
-        const textarea = this.page.locator(`#TextBox${index}-toolTip textarea`);
+
+        const textarea = this.frame.locator(
+            `#TextBox${index}-toolTip textarea`
+        );
+
         await this.clearAndFill(textarea, tooltip);
+
     }
 
     /**
@@ -64,8 +93,16 @@ export class PropertiesPanel extends BasePage {
      * @param {number} value
      */
     async setMinimumLength(index, value) {
-        const input = this.page.locator(`#TextBox${index}-minLength input`);
-        await this.clearAndFill(input, value.toString());
+
+        const input = this.frame.locator(
+            `#TextBox${index}-minLength input`
+        );
+
+        await this.clearAndFill(
+            input,
+            value.toString()
+        );
+
     }
 
     /**
@@ -74,8 +111,16 @@ export class PropertiesPanel extends BasePage {
      * @param {number} value
      */
     async setMaximumLength(index, value) {
-        const input = this.page.locator(`#TextBox${index}-maxLength input`);
-        await this.clearAndFill(input, value.toString());
+
+        const input = this.frame.locator(
+            `#TextBox${index}-maxLength input`
+        );
+
+        await this.clearAndFill(
+            input,
+            value.toString()
+        );
+
     }
 
     /**
@@ -83,8 +128,13 @@ export class PropertiesPanel extends BasePage {
      * @param {number} index
      */
     async toggleRequired(index) {
-        const checkbox = this.page.locator(`#TextBox${index}-mandatory input`);
+
+        const checkbox = this.frame.locator(
+            `#TextBox${index}-mandatory input`
+        );
+
         await checkbox.click();
+
     }
 
     /**
@@ -92,8 +142,13 @@ export class PropertiesPanel extends BasePage {
      * @param {number} index
      */
     async toggleReadOnly(index) {
-        const checkbox = this.page.locator(`#TextBox${index}-readOnly input`);
+
+        const checkbox = this.frame.locator(
+            `#TextBox${index}-readOnly input`
+        );
+
         await checkbox.click();
+
     }
 
     /**
@@ -101,28 +156,40 @@ export class PropertiesPanel extends BasePage {
      * @param {number} index
      */
     async toggleMaskData(index) {
-        const checkbox = this.page.locator(`#TextBox${index}-masked input`);
+
+        const checkbox = this.frame.locator(
+            `#TextBox${index}-masked input`
+        );
+
         await checkbox.click();
+
     }
 
     /**
      * Click Reset
      */
     async clickReset() {
+
         await this.click(this.resetButton);
+
     }
 
     /**
      * Click Delete
      */
     async clickDelete() {
+
         await this.click(this.deleteButton);
+
     }
 
     /**
      * Verify Property Panel is Visible
      */
     async isPanelVisible() {
+
         return await this.isVisible(this.panel);
+
     }
+
 }

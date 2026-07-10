@@ -1,3 +1,5 @@
+import { expect } from "@playwright/test";
+
 import { BasePage } from "./BasePage.js";
 
 import { Toolbox } from "../components/Toolbox.js";
@@ -11,27 +13,32 @@ export class FormBuilderPage extends BasePage {
     constructor(page) {
         super(page);
 
-        // Components
-        this.toolbox = new Toolbox(page);
-        this.canvas = new Canvas(page);
-        this.propertiesPanel = new PropertiesPanel(page);
-        this.rulesPanel = new RulesPanel(page);
-        this.ruleCard = new RuleCard(page);
+        // Form Builder is inside an iframe
+        this.builderFrame = page.frameLocator("iframe").first();
 
-        // Top Toolbar
-        this.saveButton = page.getByRole("button", {
+        // Components
+        this.toolbox = new Toolbox(this.builderFrame);
+        this.canvas = new Canvas(this.builderFrame);
+        this.propertiesPanel = new PropertiesPanel(this.builderFrame);
+        this.rulesPanel = new RulesPanel(this.builderFrame);
+        this.ruleCard = new RuleCard(this.builderFrame);
+
+        // Toolbar
+        this.saveButton = this.builderFrame.getByRole("button", {
             name: "Save"
         });
 
-        this.previewButton = page.getByRole("button", {
+        this.previewButton = this.builderFrame.getByRole("button", {
             name: "Preview"
         });
 
-        this.publishButton = page.getByRole("button", {
+        this.publishButton = this.builderFrame.getByRole("button", {
             name: "Publish"
         });
 
-        this.formName = page.locator('input[placeholder="Enter form name"]');
+        this.formName = this.builderFrame.locator(
+            'input[placeholder="Enter form name"]'
+        );
     }
 
     /**
@@ -46,9 +53,13 @@ export class FormBuilderPage extends BasePage {
      */
     async addTextBox() {
 
+        const before = await this.canvas.getTextBoxCount();
+
         await this.toolbox.dragTextBox(
             this.canvas.getCanvas()
         );
+
+        await expect(this.canvas.textBoxes).toHaveCount(before + 1);
 
     }
 
@@ -64,17 +75,6 @@ export class FormBuilderPage extends BasePage {
     }
 
     /**
-     * Add Password Field
-     */
-    async addPassword() {
-
-        await this.toolbox.dragPassword(
-            this.canvas.getCanvas()
-        );
-
-    }
-
-    /**
      * Configure TextBox
      */
     async configureTextBox(
@@ -84,7 +84,7 @@ export class FormBuilderPage extends BasePage {
         tooltip
     ) {
 
-        await this.canvas.clickField(label);
+        await this.canvas.clickTextBox(index);
 
         await this.propertiesPanel.setElementLabel(
             index,
@@ -136,6 +136,39 @@ export class FormBuilderPage extends BasePage {
     async publishForm() {
 
         await this.click(this.publishButton);
+
+    }
+
+    /**
+     * Create First Name Field
+     */
+    async createFirstNameField() {
+
+        await this.addTextBox();
+
+        await this.configureTextBox(
+            0,
+            "First Name",
+            "Enter First Name",
+            "Enter First Name"
+        );
+
+    }
+
+    /**
+     * Create Password Field
+     * (Uses another TextBox)
+     */
+    async createPasswordField() {
+
+        await this.addTextBox();
+
+        await this.configureTextBox(
+            1,
+            "Password",
+            "Enter Password",
+            "Enter Password"
+        );
 
     }
 

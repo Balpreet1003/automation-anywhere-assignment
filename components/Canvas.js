@@ -1,26 +1,28 @@
 import { BasePage } from '../pages/BasePage.js';
 
 export class Canvas extends BasePage {
-    constructor(page) {
-        super(page);
+    constructor(frame) {
+        super(frame);
+
+        this.frame = frame;
 
         // Main Form Canvas
-        this.canvas = page.locator('[data-item-type="content"]');
+        this.canvas = this.frame.locator('[data-item-type="content"]');
 
         // Canvas Rows
-        this.rows = page.locator('[data-item-type="row"]');
+        this.rows = this.frame.locator('[data-item-type="row"]');
 
         // Canvas Columns
-        this.columns = page.locator('[data-item-type="col"]');
+        this.columns = this.frame.locator('[data-item-type="col"]');
 
         // Drop Zone
-        this.dropZone = page.locator('.formcanvas-dropzone-bar');
+        this.dropZone = this.frame.locator('.formcanvas-dropzone-bar');
 
         // All TextBoxes
-        this.textBoxes = page.locator('[id^="TextBox"]');
+        this.textBoxes = this.frame.locator('.preview-textbox');
 
         // All Labels
-        this.labels = page.locator('.field-label');
+        this.labels = this.frame.locator('.field-label');
     }
 
     /**
@@ -56,7 +58,7 @@ export class Canvas extends BasePage {
      * @param {string} label
      */
     async hasField(label) {
-        return await this.page
+        return await this.frame
             .locator(`[data-label="${label}"]`)
             .isVisible();
     }
@@ -66,7 +68,7 @@ export class Canvas extends BasePage {
      * @param {string} label
      */
     getField(label) {
-        return this.page.locator(`[data-label="${label}"]`);
+        return this.frame.locator(`[data-label="${label}"]`);
     }
 
     /**
@@ -97,5 +99,25 @@ export class Canvas extends BasePage {
      */
     async scrollToCanvas() {
         await this.scrollIntoView(this.canvas);
+    }
+
+   getTextBox(index) {
+        return this.frame.locator(`#TextBox${index}`);
+    }
+
+    /**
+     * Click TextBox by index
+     * @param {number} index
+     */
+    async clickTextBox(index) {
+        await this.click(this.getTextBox(index));
+    }
+
+    /**
+     * Verify TextBox is visible
+     * @param {number} index
+     */
+    async verifyTextBoxVisible(index) {
+        await this.assertVisible(this.getTextBox(index));
     }
 }

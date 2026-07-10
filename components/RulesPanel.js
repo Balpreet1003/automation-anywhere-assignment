@@ -2,47 +2,51 @@ import { BasePage } from "../pages/BasePage.js";
 
 export class RulesPanel extends BasePage {
 
-    constructor(page) {
-        super(page);
+    constructor(frame) {
+        super(frame);
+
+        this.frame = frame;
 
         // Panel
-        this.rulesPanel = page.locator(".rule-border");
+        this.rulesPanel = this.frame.locator(".rule-border");
 
         // Search
-        this.searchInput = page.getByPlaceholder(
+        this.searchInput = this.frame.getByPlaceholder(
             "Search by rule name or element name"
         );
 
         // Buttons
-        this.addRuleButton = page.getByRole("button", {
+        this.addRuleButton = this.frame.getByRole("button", {
             name: "Add rule"
         });
 
-        this.addConditionButton = page.getByRole("button", {
+        this.addConditionButton = this.frame.getByRole("button", {
             name: "Add condition"
         });
 
-        this.addGroupButton = page.getByRole("button", {
+        this.addGroupButton = this.frame.getByRole("button", {
             name: "Add Group"
         });
 
-        this.addActionButton = page.getByRole("button", {
+        this.addActionButton = this.frame.getByRole("button", {
             name: "Add action"
         });
 
         // AND / OR
-        this.andButton = page.getByRole("radio", {
+        this.andButton = this.frame.getByRole("radio", {
             name: "AND"
         });
 
-        this.orButton = page.getByRole("radio", {
+        this.orButton = this.frame.getByRole("radio", {
             name: "OR"
         });
 
         // IF / THEN
-        this.ifSection = page.getByText("the following conditions are met");
+        this.ifSection = this.frame.getByText(
+            "the following conditions are met"
+        );
 
-        this.thenSection = page.getByText(
+        this.thenSection = this.frame.getByText(
             "perform the following actions"
         );
     }
