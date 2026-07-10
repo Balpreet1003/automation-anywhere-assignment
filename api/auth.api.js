@@ -2,7 +2,7 @@ const ApiClient = require("./apiClient");
 
 class AuthAPI {
     constructor() {
-        this.apiClient = new ApiClient(process.env.AA_BASE_URL);
+        this.apiClient = new ApiClient(process.env.BASE_URL);
     }
 
     async login() {
@@ -10,8 +10,8 @@ class AuthAPI {
 
         const response = await apiContext.post("/v2/authentication", {
             data: {
-                username: process.env.AA_USERNAME,
-                password: process.env.AA_ENCRYPTED_PASSWORD,
+                username: process.env.EMAIL,
+                password: process.env.PASSWORD,
                 captcha: {}
             }
         });

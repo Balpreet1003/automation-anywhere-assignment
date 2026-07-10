@@ -3,7 +3,7 @@ const ApiClient = require("./apiClient");
 class LearningInstanceAPI {
     constructor(token) {
         this.apiClient = new ApiClient(
-            process.env.AA_BASE_URL,
+            process.env.BASE_URL,
             token
         );
     }
