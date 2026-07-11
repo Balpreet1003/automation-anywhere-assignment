@@ -12,3 +12,9 @@ export function generateUniqueFormName() {
 
     return `UI_Automation_${timestamp}`;
 }
+
+export function getConditionSwitchboard(ruleIndex, conditionIndex) {
+    return this.getRule(ruleIndex).locator(
+        `[data-switchboard-for="Rule${ruleIndex + 1}-Condition${conditionIndex}"]`
+    );
+}

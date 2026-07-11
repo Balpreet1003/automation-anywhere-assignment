@@ -22,7 +22,6 @@ export const test = base.extend({
     formBuilderPage: async ({ page }, use) => {
         await use(new FormBuilderPage(page));
     },
-
 });
 
 export const expect = test.expect;

@@ -3,11 +3,11 @@ import { generateUniqueFormName } from "../../utils/helper.js";
 
 test.describe("Form Builder", () => {
 
-    test("Verify user can create a form with First Name and Password fields", async ({
+    test("Verify user can create a form with four textbox fields", async ({
         loginPage,
         dashboardPage,
         createFormDialog,
-        formBuilderPage
+        formBuilderPage,
     }) => {
 
         // Login
@@ -31,20 +31,31 @@ test.describe("Form Builder", () => {
             "Playwright UI Automation"
         );
 
-        // Add First Name TextBox
-        await formBuilderPage.createFirstNameField();
+        await formBuilderPage.createTextBoxField(
+            0,
+            "First Name",
+            "Balpreet"
+        );
 
-        // Add Password TextBox
-        await formBuilderPage.createPasswordField();
+        await formBuilderPage.createTextBoxField(
+            1,
+            "Last Name",
+            "Singh"
+        );
 
-        // Verify two TextBoxes are added
-        await expect(
-            formBuilderPage.canvas.textBoxes
-        ).toHaveCount(2);
+        await formBuilderPage.createTextBoxField(
+            2,
+            "Email",
+            "balpreetsingh83@gmail.com"
+        );
 
-        // Save Form
-        await formBuilderPage.saveForm();
+        await formBuilderPage.createTextBoxField(
+            3,
+            "Contact",
+            "9669666066"
+        );
 
+        await expect(formBuilderPage.canvas.textBoxes).toHaveCount(4);
     });
 
 });

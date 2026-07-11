@@ -1,12 +1,10 @@
-import { test } from "../../fixtures/testFixture.js";
-import { generateUniqueFormName } from "../../utils/helper.js";
+import { test, expect } from "../../fixtures/testFixture.js";
 
 test.describe("Login Tests", () => {
 
     test("Verify user can login successfully", async ({
         loginPage,
-        dashboardPage,
-        createFormDialog
+        page,
     }) => {
 
         await loginPage.navigateToLogin();
@@ -16,16 +14,7 @@ test.describe("Login Tests", () => {
             process.env.PASSWORD
         );
 
-        await dashboardPage.clickAutomationMenu();
-
-        await dashboardPage.createNewForm();
-
-        const formName = generateUniqueFormName();
-
-        await createFormDialog.createForm(
-            formName,
-            "Automation Anywhere Assignment"
-        );
+        await expect(page).toHaveURL(/#\/home/);
 
     });
 

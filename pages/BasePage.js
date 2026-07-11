@@ -218,7 +218,7 @@ export class BasePage {
      * Wait for page load to complete
      */
     async waitForPageLoad() {
-        await this.page.waitForLoadState("networkidle");
+        await this.page.waitForLoadState("domcontentloaded");
     }
 
     /**

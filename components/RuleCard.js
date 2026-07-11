@@ -1,129 +1,176 @@
+import { expect } from "@playwright/test";
 import { BasePage } from "../pages/BasePage.js";
 
 export class RuleCard extends BasePage {
-
     constructor(frame) {
         super(frame);
-
         this.frame = frame;
     }
 
-    /**
-     * Returns locator of a Rule Card
-     * @param {number} index
-     */
-    getRule(index) {
-        return this.frame.locator(".rule-border").nth(index);
+    // =========================================================
+    // Rule
+    // =========================================================
+
+    getRule(index = 0) {
+        return this.frame.locator(
+            `[id="Rule${index + 1}"]`
+        );
     }
 
-    /**
-     * Returns Rule Title
-     * @param {number} index
-     */
-    getRuleTitle(index) {
+    getRuleNameInput(index = 0) {
         return this.getRule(index)
-            .locator("input");
-    }
-
-    /**
-     * Expand Rule
-     * @param {number} index
-     */
-    async expandRule(index) {
-
-        const expandButton = this.getRule(index)
-            .getByRole("button")
+            .locator("input")
             .first();
-
-        await this.click(expandButton);
-
     }
 
-    /**
-     * Collapse Rule
-     * @param {number} index
-     */
-    async collapseRule(index) {
-
-        const collapseButton = this.getRule(index)
-            .getByRole("button")
+    getExpandButton(index = 0) {
+        return this.getRule(index)
+            .locator("button")
             .first();
-
-        await this.click(collapseButton);
-
     }
 
-    /**
-     * Rename Rule
-     * @param {number} index
-     * @param {string} ruleName
-     */
-    async renameRule(index, ruleName) {
-
-        const title = this.getRuleTitle(index);
-
-        await this.clearAndFill(title, ruleName);
-
-    }
-
-    /**
-     * Get Rule Name
-     * @param {number} index
-     */
-    async getRuleName(index) {
-
-        return await this.getRuleTitle(index).inputValue();
-
-    }
-
-    /**
-     * Open More Menu
-     * @param {number} index
-     */
-    async openMoreMenu(index) {
-
-        const menu = this.getRule(index)
-            .getByRole("button")
+    getMenuButton(index = 0) {
+        return this.getRule(index)
+            .locator("button")
             .last();
-
-        await this.click(menu);
-
     }
 
-    /**
-     * Enable Rule
-     * @param {number} index
-     */
-    async enableRule(index) {
-
-        const toggle = this.getRule(index)
+    getEnableToggle(index = 0) {
+        return this.getRule(index)
             .getByRole("checkbox");
-
-        await this.check(toggle);
-
     }
 
-    /**
-     * Disable Rule
-     * @param {number} index
-     */
-    async disableRule(index) {
-
-        const toggle = this.getRule(index)
-            .getByRole("checkbox");
-
-        await this.uncheck(toggle);
-
+    getEditButton(index = 0) {
+        return this.getRule(index)
+            .getByRole("button", {
+                name: /Edit/i,
+            });
     }
 
-    /**
-     * Verify Rule is Visible
-     * @param {number} index
-     */
-    async verifyRuleVisible(index) {
+    // =========================================================
+    // Rule Name
+    // =========================================================
 
-        await this.assertVisible(this.getRule(index));
+    async renameRule(index, name) {
+        const input = this.getRuleNameInput(index);
 
+        await input.click();
+        await input.fill("");
+        await input.fill(name);
+        await input.press("Enter");
     }
 
+    async getRuleName(index) {
+        return await this.getRuleNameInput(index).inputValue();
+    }
+
+    async verifyRuleName(index, expected) {
+        await expect(
+            this.getRuleNameInput(index)
+        ).toHaveValue(expected);
+    }
+
+    // =========================================================
+    // Expand / Collapse
+    // =========================================================
+
+    async expandRule(index = 0) {
+        const rule = this.getRule(index);
+
+        await rule.scrollIntoViewIfNeeded();
+
+        const button = this.getExpandButton(index);
+
+        await button.click();
+    }
+
+    async collapseRule(index = 0) {
+        const rule = this.getRule(index);
+
+        await rule.scrollIntoViewIfNeeded();
+
+        const button = this.getExpandButton(index);
+
+        await button.click();
+    }
+
+    async verifyExpanded(index = 0) {
+        await expect(
+            this.getRule(index).getByText(
+                "the following conditions are met"
+            )
+        ).toBeVisible();
+    }
+
+    // =========================================================
+    // Menu
+    // =========================================================
+
+    async openMenu(index = 0) {
+        await this.getMenuButton(index).click();
+    }
+
+    async clickAddRuleBelow(index = 0) {
+        await this.openMenu(index);
+
+        await this.frame
+            .getByText("Add Rule Below", {
+                exact: true,
+            })
+            .click();
+    }
+
+    async duplicateRule(index = 0) {
+        await this.openMenu(index);
+
+        await this.frame
+            .getByText("Duplicate", {
+                exact: true,
+            })
+            .click();
+    }
+
+    async deleteRule(index = 0) {
+        await this.openMenu(index);
+
+        await this.frame
+            .getByText("Delete", {
+                exact: true,
+            })
+            .click();
+    }
+
+    // =========================================================
+    // Toggle
+    // =========================================================
+
+    async enableRule(index = 0) {
+        await this.getEnableToggle(index).check();
+    }
+
+    async disableRule(index = 0) {
+        await this.getEnableToggle(index).uncheck();
+    }
+
+    // =========================================================
+    // Verification
+    // =========================================================
+
+    async verifyRuleVisible(index = 0) {
+        await expect(
+            this.getRule(index)
+        ).toBeVisible();
+    }
+
+    async verifyEditButton(index = 0) {
+        await expect(
+            this.getEditButton(index)
+        ).toBeVisible();
+    }
+
+    async verifyRuleCount(count) {
+        await expect(
+            this.frame.locator('[id^="Rule"]')
+        ).toHaveCount(count);
+    }
 }

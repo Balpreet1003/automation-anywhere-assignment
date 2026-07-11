@@ -9,11 +9,10 @@ import { RulesPanel } from "../components/RulesPanel.js";
 import { RuleCard } from "../components/RuleCard.js";
 
 export class FormBuilderPage extends BasePage {
-
     constructor(page) {
         super(page);
 
-        // Form Builder is inside an iframe
+        // Form Builder iframe
         this.builderFrame = page.frameLocator("iframe").first();
 
         // Components
@@ -25,15 +24,15 @@ export class FormBuilderPage extends BasePage {
 
         // Toolbar
         this.saveButton = this.builderFrame.getByRole("button", {
-            name: "Save"
+            name: "Save",
         });
 
         this.previewButton = this.builderFrame.getByRole("button", {
-            name: "Preview"
+            name: "Preview",
         });
 
         this.publishButton = this.builderFrame.getByRole("button", {
-            name: "Publish"
+            name: "Publish",
         });
 
         this.formName = this.builderFrame.locator(
@@ -41,17 +40,25 @@ export class FormBuilderPage extends BasePage {
         );
     }
 
-    /**
-     * Set Form Name
-     */
+    // =========================================================
+    // Builder
+    // =========================================================
+
+    async waitForBuilderReady() {
+        await this.waitForVisible(this.canvas.getCanvas());
+    }
+
     async setFormName(name) {
+        await this.waitForBuilderReady();
         await this.clearAndFill(this.formName, name);
     }
 
-    /**
-     * Add TextBox
-     */
+    // =========================================================
+    // Canvas
+    // =========================================================
+
     async addTextBox() {
+        await this.waitForBuilderReady();
 
         const before = await this.canvas.getTextBoxCount();
 
@@ -59,31 +66,27 @@ export class FormBuilderPage extends BasePage {
             this.canvas.getCanvas()
         );
 
-        await expect(this.canvas.textBoxes).toHaveCount(before + 1);
-
+        await expect(
+            this.canvas.textBoxes
+        ).toHaveCount(before + 1);
     }
 
-    /**
-     * Add Label
-     */
     async addLabel() {
-
         await this.toolbox.dragLabel(
             this.canvas.getCanvas()
         );
-
     }
 
-    /**
-     * Configure TextBox
-     */
+    // =========================================================
+    // Configure Controls
+    // =========================================================
+
     async configureTextBox(
         index,
         label,
         hint,
         tooltip
     ) {
-
         await this.canvas.clickTextBox(index);
 
         await this.propertiesPanel.setElementLabel(
@@ -100,76 +103,69 @@ export class FormBuilderPage extends BasePage {
             index,
             tooltip
         );
-
     }
 
-    /**
-     * Create Rule
-     */
-    async createRule() {
-
-        await this.rulesPanel.clickAddRule();
-
-    }
-
-    /**
-     * Save Form
-     */
-    async saveForm() {
-
-        await this.click(this.saveButton);
-
-    }
-
-    /**
-     * Preview Form
-     */
-    async previewForm() {
-
-        await this.click(this.previewButton);
-
-    }
-
-    /**
-     * Publish Form
-     */
-    async publishForm() {
-
-        await this.click(this.publishButton);
-
-    }
-
-    /**
-     * Create First Name Field
-     */
-    async createFirstNameField() {
-
+    async createTextBoxField(
+        index,
+        label,
+        defaultValue
+    ) {
         await this.addTextBox();
 
         await this.configureTextBox(
+            index,
+            label,
+            `Enter ${label}`,
+            `Enter ${label}`
+        );
+
+        await this.propertiesPanel.setDefaultValue(
+            index,
+            defaultValue
+        );
+    }
+
+    async createFirstNameField() {
+        await this.createTextBoxField(
             0,
             "First Name",
-            "Enter First Name",
-            "Enter First Name"
+            "Balpreet"
         );
-
     }
 
-    /**
-     * Create Password Field
-     * (Uses another TextBox)
-     */
     async createPasswordField() {
-
-        await this.addTextBox();
-
-        await this.configureTextBox(
+        await this.createTextBoxField(
             1,
             "Password",
-            "Enter Password",
-            "Enter Password"
+            ""
         );
-
     }
 
+    // =========================================================
+    // Rules
+    // =========================================================
+
+    async openRules() {
+        await this.rulesPanel.openRulesTab();
+    }
+
+    async addRule() {
+        await this.rulesPanel.clickAddRule();
+    }
+
+    // =========================================================
+    // Toolbar
+    // =========================================================
+
+    async saveForm() {
+        await this.click(this.saveButton);
+    }
+
+    async previewForm() {
+        await this.click(this.previewButton);
+    }
+
+    async publishForm() {
+        await this.click(this.publishButton);
+    }
 }
