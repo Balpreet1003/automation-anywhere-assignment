@@ -27,7 +27,7 @@ Before running the automation, make sure the following are installed:
 Clone the repository and install dependencies:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Balpreet1003/automation-anywhere-assignment.git
 cd Automation_Anywhere_Assignment
 npm install
 ```
