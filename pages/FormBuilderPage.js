@@ -6,7 +6,6 @@ import { Toolbox } from "../components/Toolbox.js";
 import { Canvas } from "../components/Canvas.js";
 import { PropertiesPanel } from "../components/PropertiesPanel.js";
 import { RulesPanel } from "../components/RulesPanel.js";
-import { RuleCard } from "../components/RuleCard.js";
 
 export class FormBuilderPage extends BasePage {
     constructor(page) {
@@ -20,7 +19,6 @@ export class FormBuilderPage extends BasePage {
         this.canvas = new Canvas(this.builderFrame);
         this.propertiesPanel = new PropertiesPanel(this.builderFrame);
         this.rulesPanel = new RulesPanel(this.builderFrame);
-        this.ruleCard = new RuleCard(this.builderFrame);
 
         // Toolbar
         this.saveButton = this.builderFrame.getByRole("button", {
@@ -142,30 +140,99 @@ export class FormBuilderPage extends BasePage {
     }
 
     // =========================================================
-    // Rules
+    // Rule Builder
     // =========================================================
 
-    async openRules() {
+    async createRule1() {
+
         await this.rulesPanel.openRulesTab();
+
+        await this.rulesPanel.clickAddRule();
+
+        await this.rulesPanel.selectConditionElement(
+            "First Name - TextBox0"
+        );
+
+        await this.rulesPanel.selectConditionType(
+            "Is not empty"
+        );
+
+        await this.rulesPanel.clickAddCondition();
+
+        await this.rulesPanel.selectAND();
+
+        await this.rulesPanel.selectSecondConditionElement(
+            "Last Name - TextBox1"
+        );
+
+        await this.rulesPanel.selectSecondConditionType(
+            "Is not empty"
+        );
+
+        await this.rulesPanel.selectActionElement(
+            "Contact - TextBox3"
+        );
+
+        await this.rulesPanel.selectAction(
+            "Disable"
+        );
     }
 
-    async addRule() {
+    async createRule2() {
+
         await this.rulesPanel.clickAddRule();
+
+        await this.rulesPanel.selectConditionElement(
+            "First Name - TextBox0"
+        );
+
+        await this.rulesPanel.selectConditionType(
+            "Is not empty"
+        );
+
+        await this.rulesPanel.selectActionElement(
+            "Email - TextBox2"
+        );
+
+        await this.rulesPanel.selectAction(
+            "Set value"
+        );
+
+        await this.rulesPanel.enterActionValue(
+            "balpreetSingh83@gmail.com"
+        );
+    }
+
+    async createRule3() {
+
+        await this.rulesPanel.clickAddRule();
+
+        await this.rulesPanel.selectConditionElement(
+            "Last Name - TextBox1"
+        );
+
+        await this.rulesPanel.selectConditionType(
+            "Is empty"
+        );
+
+        await this.rulesPanel.selectActionElement(
+            "Email - TextBox2"
+        );
+
+        await this.rulesPanel.selectAction(
+            "Set value"
+        );
+
+        await this.rulesPanel.enterActionValue(
+            "balpreet83@gmail.com"
+        );
     }
 
     // =========================================================
-    // Toolbar
+    // Save
     // =========================================================
 
     async saveForm() {
-        await this.click(this.saveButton);
-    }
-
-    async previewForm() {
-        await this.click(this.previewButton);
-    }
-
-    async publishForm() {
-        await this.click(this.publishButton);
+        await this.saveButton.click();
     }
 }

@@ -1,290 +1,326 @@
 import { BasePage } from "../pages/BasePage.js";
 
 export class RulesPanel extends BasePage {
+
     constructor(frame) {
         super(frame);
 
         this.frame = frame;
 
-        // ----------------------------
+        // -------------------------
         // Tabs
-        // ----------------------------
+        // -------------------------
 
-        this.rulesTab = frame.locator(
-            '[data-tab-name="Form rules"]'
+        this.rulesTab = this.frame.getByRole(
+            'tab', { name: '[object Object]' }
         );
 
-        // ----------------------------
-        // Panel
-        // ----------------------------
+        // -------------------------
+        // Main Panel
+        // -------------------------
 
-        this.rulesPanel = frame.locator(".rule-border");
+        this.rulesPanel =
+            this.frame.locator(".rule-border");
 
-        this.ruleList = frame.locator(".rule-list");
+        this.ruleList =
+            this.frame.locator(".rule-list");
 
-        this.searchInput = frame.getByPlaceholder(
-            "Search by rule name or element name"
-        );
+        // -------------------------
+        // Buttons
+        // -------------------------
 
-        this.addRuleButton = frame.getByRole("button", {
-            name: "Add rule",
-        });
+        this.addRuleButton =
+            this.frame.getByRole("button", {
+                name: "Add rule"
+            });
 
-        // Global dropdown
-        this.dropdown = frame.locator(
-            '[data-path="RioSelectInput.Dropdown"]'
-        );
+        this.addConditionButton =
+            this.frame.getByRole("button", {
+                name: "Add condition"
+            });
+
+        this.addActionButton =
+            this.frame.getByRole("button", {
+                name: "Add action"
+            });
+
+        this.addGroupButton =
+            this.frame.getByRole("button", {
+                name: "Add Group"
+            });
+
+        // -------------------------
+        // Search
+        // -------------------------
+
+        this.searchInput =
+            this.frame.getByPlaceholder(
+                "Search by rule name or element name"
+            );
+
+        // -------------------------
+        // IF / THEN
+        // -------------------------
+
+        this.ifSection =
+            this.frame.getByText(
+                "the following conditions are met"
+            );
+
+        this.thenSection =
+            this.frame.getByText(
+                "perform the following actions"
+            );
+
+        // -------------------------
+        // First Condition
+        // -------------------------
+
+        this.firstConditionElement =
+            this.frame
+                .locator(
+                    ".rio-focus.rio-focus--inset_1px.rio-focus--border-radius_2px.rio-select-input-query"
+                )
+                .first();
+
+        this.firstConditionType =
+            this.frame
+                .locator(
+                    ".gridlayout-content > .gridlayout > .gridlayout-row > .gridlayout-column > .gridlayout-content > .rio-select-input > div > .rio-focus"
+                )
+                .first();
+
+        // -------------------------
+        // Second Condition
+        // -------------------------
+
+        this.secondConditionElement =
+            this.frame
+                .getByRole("textbox", {
+                    name: "Select element"
+                })
+                .first();
+
+        this.secondConditionType =
+            this.frame.getByRole(
+                "textbox",
+                {
+                    name: "Select condition"
+                }
+            );
+
+        // -------------------------
+        // AND / OR
+        // -------------------------
+
+        this.andRadio =
+            this.frame.getByRole(
+                "radio",
+                {
+                    name: "AND"
+                }
+            );
+
+        this.orRadio =
+            this.frame.getByRole(
+                "radio",
+                {
+                    name: "OR"
+                }
+            );
+
+        // -------------------------
+        // Action
+        // -------------------------
+
+        this.actionElement =
+            this.frame
+                .getByRole("textbox", {
+                    name: "Select element"
+                })
+                .last();
+
+        this.actionType =
+            this.frame.getByRole(
+                "textbox",
+                {
+                    name: "Select action"
+                }
+            );
+
+        this.actionValue =
+            this.frame.getByRole(
+                "textbox",
+                {
+                    name: "Enter value"
+                }
+            );
     }
 
-    // ==========================================================
-    // Rule Helpers
-    // ==========================================================
-
-    getRule(ruleIndex = 0) {
-        return this.frame.locator(
-            `[id="Rule${ruleIndex + 1}"]`
-        );
-    }
-
-    getCondition(ruleIndex = 0, conditionIndex = 0) {
-        return this.getRule(ruleIndex).locator(
-            `[data-condition-header-id="Rule${ruleIndex + 1}-Condition${conditionIndex}"]`
-        );
-    }
-
-    getConditionSwitchboard(ruleIndex = 0, conditionIndex = 0) {
-        return this.getRule(ruleIndex).locator(
-            `[data-switchboard-for="Rule${ruleIndex + 1}-Condition${conditionIndex}"]`
-        );
-    }
-
-    // getAction(ruleIndex = 0, actionIndex = 0) {
-    //     return this.getRule(ruleIndex).locator(
-    //         `[data-action-header-id="Rule${ruleIndex + 1}-Action${actionIndex}"]`
-    //     );
-    // }
-
-    // ==========================================================
-    // Verification
-    // ==========================================================
+    // ======================================================
+    // Navigation
+    // ======================================================
 
     async openRulesTab() {
-        await this.rulesTab.click();
-        await this.verifyRulesPanelVisible();
+
+        await this.click(this.rulesTab);
+
     }
 
-    async verifyRulesPanelVisible() {
-        await this.assertVisible(this.rulesPanel);
-    }
-
-    async verifyRuleListVisible() {
-        await this.assertVisible(this.ruleList);
-    }
-
-    // ==========================================================
-    // Rule Buttons
-    // ==========================================================
+    // ======================================================
+    // Rule
+    // ======================================================
 
     async clickAddRule() {
-        await this.addRuleButton.click();
-    }
 
-    async clickAddCondition(ruleIndex = 0) {
-        await this.getRule(ruleIndex)
-            .getByRole("button", {
-                name: "Add condition",
-            })
-            .click();
-    }
-
-    async clickAddGroup(ruleIndex = 0) {
-        await this.getRule(ruleIndex)
-            .getByRole("button", {
-                name: "Add Group",
-            })
-            .click();
-    }
-
-    async clickAddAction(ruleIndex = 0) {
-        await this.getRule(ruleIndex)
-            .getByRole("button", {
-                name: "Add action",
-            })
-            .click();
-    }
-
-    // ==========================================================
-    // Dropdown Helper
-    // ==========================================================
-
-    async selectFromDropdown(option) {
-        const dropdown = this.dropdown;
-
-        await dropdown.waitFor({
-            state: "visible",
-        });
-
-        await dropdown
-            .getByText(option, {
-                exact: true,
-            })
-            .click();
-    }
-
-    // ==========================================================
-    // Condition
-    // ==========================================================
-
-    async selectConditionElement(
-        elementName,
-        ruleIndex = 0,
-        conditionIndex = 0
-    ) {
-        const condition = this.getCondition(
-            ruleIndex,
-            conditionIndex
+        await this.click(
+            this.addRuleButton
         );
 
-        await condition
-            .locator(".supported-select-list .rio-select-input-query")
+    }
+
+    async searchRule(rule) {
+
+        await this.clearAndFill(
+            this.searchInput,
+            rule
+        );
+
+    }
+
+    // ======================================================
+    // Condition
+    // ======================================================
+
+    async clickFirstConditionElement() {
+
+        await this.click(
+            this.firstConditionElement
+        );
+
+    }
+
+    async selectConditionElement(name) {
+
+        await this.clickFirstConditionElement();
+
+        await this.frame
+            .getByText(name)
+            .click();
+
+    }
+
+    async clickFirstConditionType() {
+
+        await this.click(
+            this.firstConditionType
+        );
+
+    }
+
+    async selectConditionType(type) {
+
+        await this.clickFirstConditionType();
+
+        await this.frame
+            .getByText(type)
             .first()
             .click();
 
-        await this.selectFromDropdown(elementName);
     }
 
-    async selectConditionType(
-        conditionName,
-        ruleIndex = 0,
-        conditionIndex = 0
-    ) {
-        const condition = this.getCondition(
-            ruleIndex,
-            conditionIndex
+    async clickAddCondition() {
+
+        await this.click(
+            this.addConditionButton
         );
 
-        await condition
-            .getByPlaceholder("Select condition")
-            .click();
-
-        await this.selectFromDropdown(conditionName);
     }
 
-    async enterConditionValue(
-        value,
-        ruleIndex = 0,
-        conditionIndex = 0
-    ) {
-        const condition = this.getCondition(
-            ruleIndex,
-            conditionIndex
+    async selectAND() {
+
+        await this.click(
+            this.andRadio
         );
 
-        await condition
-            .getByPlaceholder("Enter value")
-            .fill(value);
     }
 
-    async selectAND(ruleIndex = 0, conditionIndex = 1) {
+    async selectOR() {
 
-        await this.getConditionSwitchboard(
-            ruleIndex,
-            conditionIndex
-        )
-            .getByRole("radio", {
-                name: "AND",
-            })
-            .click();
+        await this.click(
+            this.orRadio
+        );
+
     }
 
-    async selectOR(
-        ruleIndex = 0,
-        conditionIndex = 0
-    ) {
-        await this.getCondition(
-            ruleIndex,
-            conditionIndex
-        )
-            .getByRole("radio", {
-                name: "OR",
-            })
-            .check();
-    }
+    async selectSecondConditionElement(name) {
 
-    // ==========================================================
-    // Action
-    // ==========================================================
+        await this.click(
+            this.secondConditionElement
+        );
 
-    async selectOR(ruleIndex = 0, conditionIndex = 1) {
-
-        await this.getConditionSwitchboard(
-            ruleIndex,
-            conditionIndex
-        )
-            .getByRole("radio", {
-                name: "OR",
-            })
-            .click();
-    }
-
-    async selectActionType(
-        actionType,
-        ruleIndex = 0
-    ) {
-        const rule = this.getRule(ruleIndex);
-
-        await rule
-            .getByPlaceholder("Select action")
+        await this.frame
+            .getByText(name)
             .click();
 
-        await this.dropdown
-            .getByText(actionType, {
-                exact: true,
-            })
-            .click();
     }
 
-    async enterActionValue(
-        value,
-        ruleIndex = 0
-    ) {
-        const rule = this.getRule(ruleIndex);
+    async selectSecondConditionType(type) {
 
-        await rule
-            .getByPlaceholder("Enter value")
-            .fill(value);
-    }
+        await this.click(
+            this.secondConditionType
+        );
 
-    async selectActionElement(
-        elementName,
-        ruleIndex = 0
-    ) {
-        const rule = this.getRule(ruleIndex);
-
-        await rule
-            .getByPlaceholder("Select element")
+        await this.frame
+            .getByText(type)
             .last()
             .click();
 
-        await this.dropdown.waitFor({
-            state: "visible",
-        });
-
-        await this.dropdown
-            .getByText(elementName, {
-                exact: true,
-            })
-            .click();
     }
 
-    // ==========================================================
-    // Search
-    // ==========================================================
+    // ======================================================
+    // Action
+    // ======================================================
 
-    async searchRule(ruleName) {
-        await this.clearAndFill(
-            this.searchInput,
-            ruleName
+    async clickAddAction() {
+
+        await this.click(
+            this.addActionButton
         );
+
+    }
+
+    async selectActionElement(name) {
+
+        await this.click(
+            this.actionElement
+        );
+
+        await this.frame
+            .locator('label').filter({ hasText: name })
+            .click();
+
+    }
+
+    async selectAction(action) {
+
+        await this.click(
+            this.actionType
+        );
+
+        await this.frame
+            .getByText(action)
+            .first()
+            .click();
+
+    }
+
+    async enterActionValue(value) {
+
+        await this.clearAndFill(
+            this.actionValue,
+            value
+        );
+
     }
 }

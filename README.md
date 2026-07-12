@@ -59,7 +59,6 @@ Automation_Anywhere_Assignment/
 │   ├── Toolbox.js
 │   ├── PropertiesPanel.js
 │   ├── RulesPanel.js
-│   └── RuleCard.js
 ├── pages/
 │   ├── BasePage.js
 │   ├── LoginPage.js
@@ -212,7 +211,6 @@ FormBuilderPage
  ├── Canvas
  ├── PropertiesPanel
  ├── RulesPanel
- └── RuleCard
 ```
 
 The UI tests are located under `tests/ui/` and use the reusable page objects in `pages/`, reusable components in `components/`, fixtures in `fixtures/`, and helper methods in `utils/`.
