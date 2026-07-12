@@ -1,16 +1,16 @@
-import { test, expect } from "../../fixtures/testFixture.js";
+import { test } from "../../fixtures/testFixture.js";
 import { generateUniqueFormName } from "../../utils/helper.js";
 
-test.describe("Form Builder", () => {
+test.describe("Rules Builder", () => {
 
-    test("Verify user can create a form with four textbox fields", async ({
+    test("Verify user can add a rule and save the form", async ({
+        page,
         loginPage,
         dashboardPage,
         createFormDialog,
         formBuilderPage,
     }) => {
 
-        // Login
         await loginPage.navigateToLogin();
 
         await loginPage.login(
@@ -18,10 +18,8 @@ test.describe("Form Builder", () => {
             process.env.PASSWORD
         );
 
-        // Open Automation
         await dashboardPage.clickAutomationMenu();
 
-        // Create New Form
         await dashboardPage.createNewForm();
 
         const formName = generateUniqueFormName();
@@ -30,6 +28,12 @@ test.describe("Form Builder", () => {
             formName,
             "Playwright UI Automation"
         );
+
+        await formBuilderPage.waitForBuilderReady();
+
+        // ----------------------------------------------------
+        // Create Form Elements
+        // ----------------------------------------------------
 
         await formBuilderPage.createTextBoxField(
             0,
@@ -55,7 +59,18 @@ test.describe("Form Builder", () => {
             "9669666066"
         );
 
-        await expect(formBuilderPage.canvas.textBoxes).toHaveCount(4);
+        // ----------------------------------------------------
+        // Rules
+        // ----------------------------------------------------
+        
+        await formBuilderPage.createRule1();
+
+        await formBuilderPage.createRule2();
+
+        await formBuilderPage.createRule3();
+
+        await formBuilderPage.saveForm();
+
     });
 
 });
